@@ -1,0 +1,48 @@
+name: ServiceNow DevOps Pipeline
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: ServiceNow DevOps Change
+        uses: ServiceNow/servicenow-devops-change@v6.1.0
+
+        with:
+          instance-url: ${{ secrets.SN_INSTANCE_URL }}
+
+          tool-id: ${{ secrets.SN_ORCHESTRATION_TOOL_ID }}
+
+          context-github: ${{ toJSON(github) }}
+
+          job-name: 'build'
+
+          devops-integration-token: ${{ secrets.SN_DEVOPS_TOKEN }}
+
+          change-request: >
+            {
+              "attributes": {
+                "short_description": "GitHub Deployment with Charles",
+                "description": "Automated CRQ from GitHub Actions"
+              }
+            }
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Verify Python
+        run: python --version
+
+      - name: Success Message
+        run: echo "Pipeline completed successfully"
