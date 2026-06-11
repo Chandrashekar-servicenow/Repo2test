@@ -31,7 +31,7 @@ jobs:
           change-request: >
             {
               "attributes": {
-                "short_description": "GitHub Deployment with Charles",
+                "short_description": "GitHub Deployment with token",
                 "description": "Automated CRQ from GitHub Actions"
               }
             }
